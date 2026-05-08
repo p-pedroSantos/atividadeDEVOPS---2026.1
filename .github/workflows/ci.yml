@@ -1,0 +1,47 @@
+name: CI DataFlow ETL
+
+# Gatilhos de execução [cite: 243, 266]
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build-and-test:
+    # Ambiente de execução limpo e reprodutível [cite: 243, 338]
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Checkout do código [cite: 268, 371]
+      - name: Checkout do Repositório
+        uses: actions/checkout@v4
+
+      # 2. Setup do Python [cite: 269, 372]
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip' # Ativa cache para acelerar o pipeline
+
+      # 3. Instalação de Dependências [cite: 270, 373]
+      - name: Instalar Dependências
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      # 4. Lint (Análise Estática) 
+      # Garante que o código segue padrões e não tem erros de sintaxe
+      - name: Executar Lint (Ruff)
+        run: pip install ruff && ruff check .
+
+      # 5. Build (Simulação de empacotamento) [cite: 272, 375]
+      - name: Build do Projeto
+        run: |
+          # Exemplo de comando de build ou verificação de integridade
+          echo "Gerando artefatos de ETL..."
+
+      # 6. Testes Automatizados 
+      # A etapa mais crítica para validar a lógica de transformação
+      - name: Executar Testes Unitários
+        run: pytest
